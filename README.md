@@ -194,9 +194,9 @@ initrd /initramfs-linux.img
 options root=PARTUUID=xxx rootfstype=ext4 add_efi_memmap rw
 ```
 
-To get the UUID easily (since we can't copy/paste anything at this point):
+To get the [GPT partition UUID](https://wiki.archlinux.org/index.php/Persistent_block_device_naming#by-partuuid) easily (since we can't copy/paste anything at this point):
 
-```
+```sh
 ls -l /dev/disk/by-partuuid/ | grep nvme0n1p3 | cut -f 10 -d " " >> /boot/loader/entries/arch.conf
 ```
 
