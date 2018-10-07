@@ -2,7 +2,7 @@
 
 ## Introduction
 
-These are my notes on installing Arch Linux. This is not meant to be a universal guide, but only how I like to setup Arch Linux on my workstations. Since other people might find it useful, I decided to publish it.
+These are my notes on installing [Arch Linux](https://www.archlinux.org/). This is not meant to be a universal guide, but only how I like to setup Arch Linux on my workstations. Since other people might find it useful, I decided to publish it.
 
 Here is the setup I use:
 
