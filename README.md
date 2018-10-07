@@ -206,6 +206,11 @@ ls -l /dev/disk/by-partuuid/ | grep nvme0n1p3 | cut -f 10 -d " " >> /boot/loader
 
 As this point, the system should be working and usable, you we can reboot. You can also stay in the chroot.
 
+```sh
+mount -R /mnt
+reboot
+```
+
 ## Intel Microcode
 
 https://wiki.archlinux.org/index.php/Microcode
