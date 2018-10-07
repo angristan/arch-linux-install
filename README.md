@@ -16,7 +16,8 @@ Here is the setup I use:
 
 ## Todo
 
-- Disk encryption (cryptsetup, LUKS, LVM...)
+- https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Simple_partition_layout_with_LUKS
+- https://wiki.archlinux.org/index.php/Dm-crypt/Swap_encryption#Without_suspend-to-disk_support
 
 ## Resources
 
