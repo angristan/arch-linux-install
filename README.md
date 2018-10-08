@@ -7,8 +7,8 @@ These are my notes on installing [Arch Linux](https://www.archlinux.org/). This 
 Here is the setup I use:
 
 - UEFI
-- NVMe disk
 - systemd-boot
+- LUKS
 - NetworkManager
 - Xorg
 - KDE / Plasma
@@ -16,8 +16,8 @@ Here is the setup I use:
 
 ## Todo
 
-- https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Simple_partition_layout_with_LUKS
-- https://wiki.archlinux.org/index.php/Dm-crypt/Swap_encryption#Without_suspend-to-disk_support
+- [Encrypted swap](https://wiki.archlinux.org/index.php/Dm-crypt/Swap_encryption#Without_suspend-to-disk_support)
+- LVM
 
 ## Resources
 
@@ -54,9 +54,8 @@ timedatectl set-timezone Europe/Paris
 
 ## Partitionning
 
-https://wiki.archlinux.org/index.php/Partitioning
-
-https://wiki.archlinux.org/index.php/EFI_system_partition
+- https://wiki.archlinux.org/index.php/Partitioning
+- https://wiki.archlinux.org/index.php/EFI_system_partition
 
 Here, a NVMe disk is used.
 
@@ -70,26 +69,45 @@ Choose GPT if asked.
 
 Partitions:
 
-| Partition      | Space     | Type             |
-|----------------|-----------|------------------|
-| /dev/nvme0n1p1 | 512M      | EFI System       |
-| /dev/nvme0n1p2 | 4G        | swap             |
-| /dev/nvme0n1p3 | Remaining | Linux Filesystem |
+| Partition  | Space  | Type             |
+|------------|--------|------------------|
+| /dev/sda1  | 512M   | EFI System       |
+| /dev/sda2  | xG     | Linux Filesystem |
+| /dev/sda3  | 4G     | swap             |
 
 Create the partitions, then label them. Then write and quit.
 
-Format partitions:
+## File systems and LUKS encryption
+
+- https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Simple_partition_layout_with_LUKS
+
+Prepare the encrypted container:
 
 ```sh
-mkfs.fat -F32 /dev/nvme0n1p1
-mkfs.ext4 /dev/nvme0n1p3
+cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --key-size 512 /dev/sda2
+cryptsetup open /dev/sda2 cryptroot
+```
+
+Format and mount it:
+
+```sh
+mkfs.ext4 /dev/mapper/cryptroot
+mount /dev/mapper/cryptroot /mnt
+```
+
+Format the boot partition and mount it:
+
+```sh
+mkfs.fat -F32 /dev/sda1
+mkdir -p /mnt/boot
+mount /dev/sda1 /mnt/boot
 ```
 
 Create and enable swap:
 
 ```sh
-mkswap /dev/nvme0n1p2
-swapon /dev/nvme0n1p2
+mkswap /dev/sda3
+swapon /dev/sda3
 ```
 
 Check if it's working with:
@@ -100,15 +118,7 @@ free -h
 
 ## Install system
 
-Mount the partitions:
-
-```sh
-mount /dev/nvme0n1p3 /mnt
-mkdir -p /mnt/boot
-mount /dev/nvme0n1p1 /mnt/boot
-```
-
-Install base system
+Install the base packages:
 
 ```sh
 pacstrap /mnt base base-devel
@@ -135,7 +145,7 @@ ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 hwclock --systohc
 ```
 
-Uncomment `en_US.UTF-8 UTF-8` and `fr_FR.UTF-8 UTF-8` in `/etc/locale.gen`.
+Uncomment `en_US.UTF-8 UTF-8` (and `fr_FR.UTF-8 UTF-8` if needed) in `/etc/locale.gen`.
 
 Generate locales:
 
@@ -175,9 +185,27 @@ Set root password:
 passwd
 ```
 
+## Inital ramdisk
+
+- https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Configuring_mkinitcpio
+- https://wiki.archlinux.org/index.php/Mkinitcpio
+
+Update the following line in `/etc/kminitcpio.conf`:
+
+```sh
+HOOKS=(base systemd autodetect keyboard sd-vconsole modconf block sd-encrypt filesystems fsck)
+```
+
+Generate the ramdisks using the presets:
+
+```sh
+mkinitcpio -P
+```
+
 ## Setup systemd-boot as the bootloader
 
-https://wiki.archlinux.org/index.php/Systemd-boot
+- https://wiki.archlinux.org/index.php/Systemd-boot
+- https://bbs.archlinux.org/viewtopic.php?id=230911
 
 Since we're using `/boot/`, no need to use `--path` option.
 
@@ -191,29 +219,31 @@ bootctl install
 title Arch Linux
 linux /vmlinuz-linux
 initrd /initramfs-linux.img
-options root=PARTUUID=xxx rootfstype=ext4 add_efi_memmap rw
+options luks.name=<sda2 UUID>=cryptroot root=UUID=<dm-0> rw
 ```
 
-To get the [GPT partition UUID](https://wiki.archlinux.org/index.php/Persistent_block_device_naming#by-partuuid) easily (since we can't copy/paste anything at this point):
+Note: `root` can also be `root=/dev/mapper/rootcrypt`.
+
+To get the [partition UUID](https://wiki.archlinux.org/index.php/Persistent_block_device_naming#by-uuid) easily (since we can't copy/paste anything at this point):
 
 ```sh
-ls -l /dev/disk/by-partuuid/ | grep nvme0n1p3 | cut -f 10 -d " " >> /boot/loader/entries/arch.conf
+ls -l /dev/disk/by-uuid/ | grep sda2 | cut -f 10 -d " " >> /boot/loader/entries/arch.conf
+ls -l /dev/disk/by-uuid/ | grep dm-0 | cut -f 10 -d " " >> /boot/loader/entries/arch.conf
 ```
-
-`nvme0n1p3` beeing our `/` partition.
 
 ## Reboot! (if you want)
 
 As this point, the system should be working and usable, you we can reboot. You can also stay in the chroot.
 
 ```sh
-mount -R /mnt
+exit
+umount -R /mnt
 reboot
 ```
 
 ## Intel Microcode
 
-https://wiki.archlinux.org/index.php/Microcode
+- https://wiki.archlinux.org/index.php/Microcode
 
 ```sh
 pacman -S intel-ucode
@@ -229,7 +259,7 @@ dmesg -T | grep microcode
 
 ## Networking with NetworkManager
 
-https://wiki.archlinux.org/index.php/NetworkManager
+- https://wiki.archlinux.org/index.php/NetworkManager
 
 ```sh
 sudo systemctl enable NetworkManager
@@ -257,7 +287,7 @@ passwd stanislas
 
 ## Xorg
 
-https://wiki.archlinux.org/index.php/Xorg
+- https://wiki.archlinux.org/index.php/Xorg
 
 ```sh
 pacman -S xorg-server
@@ -266,7 +296,7 @@ pacman -S xf86-video-intel
 
 ## Desktop environment: Plasma and KDE
 
-https://wiki.archlinux.org/index.php/KDE
+- https://wiki.archlinux.org/index.php/KDE
 
 ```sh
 pacman -S plasma
@@ -275,7 +305,7 @@ pacman -S kde-applications
 
 ## Display manager: SDDM
 
-https://wiki.archlinux.org/index.php/SDDM
+- https://wiki.archlinux.org/index.php/SDDM
 
 ```sh
 sudo pacman -S sddm
@@ -303,7 +333,7 @@ pacman -S ttf-{bitstream-vera,liberation,freefont,dejavu} freetype2
 
 As I trained in a VMware Fusion VM, here are some notes.
 
-https://wiki.archlinux.org/index.php/VMware/Installing_Arch_as_a_guest
+- https://wiki.archlinux.org/index.php/VMware/Installing_Arch_as_a_guest
 
 Install `xf86-video-vmware` instead of `xf86-video-intel`. `xf86-input-vmmouse` too.
 
