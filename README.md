@@ -219,7 +219,7 @@ bootctl install
 title Arch Linux
 linux /vmlinuz-linux
 initrd /initramfs-linux.img
-options luks.name=<sda2 UUID>=cryptroot root=UUID=<dm-0> rw
+options rd.luks.name=<sda2 UUID>=cryptroot root=UUID=<dm-0> rw
 ```
 
 Note: `root` can also be `root=/dev/mapper/rootcrypt`.
@@ -231,14 +231,32 @@ ls -l /dev/disk/by-uuid/ | grep sda2 | cut -f 10 -d " " >> /boot/loader/entries/
 ls -l /dev/disk/by-uuid/ | grep dm-0 | cut -f 10 -d " " >> /boot/loader/entries/arch.conf
 ```
 
-## Reboot! (if you want)
+## Encrypted swap
 
-As this point, the system should be working and usable, you we can reboot. You can also stay in the chroot.
+- https://wiki.archlinux.org/index.php/Dm-crypt/Swap_encryption#UUID_and_LABEL
+
+This setup will use `crypttab` to initalize a swap parition on `/dev/sda2`, encrypted with a key from `/dev/urandom`, upon each boot.
+
+Thus, when the machine is shutdown, the key is lost and the content of the swap partition can't be read.
+
+As usual, we want to use UUID since they are safer to use than their `/dev` mappings. Also, the partition will be wiped upon each reboot so it's very important to make sure the same partition is always used.
+
+Since it will be wiped, we can't use a UUID or a label to identify it. Except if we create a tiny, empty file system with a label and then define an offset in `crypttab`.
 
 ```sh
-exit
-umount -R /mnt
-reboot
+mkfs.ext2 -L cryptswap /dev/sda3 1M
+```
+
+`/etc/crypttab`:
+
+```
+swap LABEL=cryptswap /dev/urandom swap,offset=2048,cipher=aes-xts-plain64,size=512
+```
+
+`/etc/fstab`:
+
+```
+/dev/mapper/swap none swap defaults 0 0
 ```
 
 ## Intel Microcode
@@ -262,11 +280,22 @@ dmesg -T | grep microcode
 - https://wiki.archlinux.org/index.php/NetworkManager
 
 ```sh
+pacman -S networkmanager
 sudo systemctl enable NetworkManager
 sudo systemctl start NetworkManager
 ```
 
 If wired with DHCP, nothing more to do.
+
+## Reboot! (if you want)
+
+As this point, the system should be working and usable, you we can reboot. You can also stay in the chroot.
+
+```sh
+exit
+umount -R /mnt
+reboot
+```
 
 ## User account
 
