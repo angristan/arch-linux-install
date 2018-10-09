@@ -146,8 +146,11 @@ locale-gen
 
 Set default locale:
 
+- https://wiki.archlinux.org/index.php/Locale#LC_COLLATE:_collation
+
 ```sh
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
+echo "LANG=en_US.UTF-8
+LC_COLLATE=C" > /etc/locale.conf
 ```
 
 Set keymap to French (if needed):
@@ -252,12 +255,14 @@ swap LABEL=cryptswap /dev/urandom swap,offset=2048,cipher=aes-xts-plain64,size=5
 
 ## Intel Microcode
 
-- https://wiki.archlinux.org/index.php/Microcode
+- https://wiki.archlinux.org/index.php/Microcode 
+if Ryzen or amd cpu amd-ucode
+- https://www.archlinux.org/packages/core/any/amd-ucode/
 
 ```sh
 pacman -S intel-ucode
 ```
-
+(Same here for amd-ucode)
 Add `initrd /intel-ucode.img` above `initrd /initramfs-linux.img` in `/boot/loader/entries/arch.conf`.
 
 Check after reboot:
@@ -285,6 +290,7 @@ As this point, the system should be working and usable, you we can reboot. You c
 ```sh
 exit
 umount -R /mnt
+cryptsetup close cryptroot
 reboot
 ```
 
@@ -366,5 +372,11 @@ sudo systemctl start vmtoolsd
 ```
 
 ## Now what?
+
+I recommand add this to network manager for disabling check internet on archlinux.org
+
+echo "[connectivity]
+uri=
+interval=0" >> /etc/NetworkManager/NetworkManager.conf
 
 See https://wiki.archlinux.org/index.php/General_recommendations
