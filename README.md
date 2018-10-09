@@ -136,6 +136,8 @@ ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 hwclock --systohc
 ```
 
+See https://wiki.archlinux.org/index.php/Locale
+
 Uncomment `en_US.UTF-8 UTF-8` (and `fr_FR.UTF-8 UTF-8` if needed) in `/etc/locale.gen`.
 
 Generate locales:
@@ -147,7 +149,8 @@ locale-gen
 Set default locale:
 
 ```sh
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
+echo "LANG=en_US.UTF-8
+LC_COLLATE=C" > /etc/locale.conf
 ```
 
 Set keymap to French (if needed):
@@ -266,6 +269,8 @@ Check after reboot:
 dmesg -T | grep microcode
 ```
 
+Use `amd-ucode` for an AMD CPU.
+
 ## Networking with NetworkManager
 
 - https://wiki.archlinux.org/index.php/NetworkManager
@@ -285,6 +290,7 @@ As this point, the system should be working and usable, you we can reboot. You c
 ```sh
 exit
 umount -R /mnt
+cryptsetup close cryptroot
 reboot
 ```
 
