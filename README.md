@@ -8,22 +8,13 @@ Here is the setup I use:
 
 - UEFI
 - systemd-boot
-- LUKS
+- Encrypted disk + swap, plain `/boot`
 - NetworkManager
 - Xorg
 - KDE / Plasma
 - SDDM
 
-## Todo
-
-- [Encrypted swap](https://wiki.archlinux.org/index.php/Dm-crypt/Swap_encryption#Without_suspend-to-disk_support)
-- LVM
-
-## Resources
-
-I've followed the *official* installation guide.
-
-https://wiki.archlinux.org/index.php/Installation_guide
+This is mostly based on the [installation guide](https://wiki.archlinux.org/index.php/Installation_guide). I kept what I needed and added other parts. I made sure to put the links to all the wiki pages that I used. (❤️ Arch Wiki)
 
 ## Inital setup
 
