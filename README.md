@@ -255,7 +255,7 @@ swap LABEL=cryptswap /dev/urandom swap,offset=2048,cipher=aes-xts-plain64,size=5
 
 ## Intel Microcode
 
-- https://wiki.archlinux.org/index.php/Microcode 
+- https://wiki.archlinux.org/index.php/Microcode
 
 ```sh
 pacman -S intel-ucode
@@ -372,11 +372,5 @@ sudo systemctl start vmtoolsd
 ```
 
 ## Now what?
-
-I recommand add this to network manager for disabling check internet on archlinux.org
-
-echo "[connectivity]
-uri=
-interval=0" >> /etc/NetworkManager/NetworkManager.conf
 
 See https://wiki.archlinux.org/index.php/General_recommendations
