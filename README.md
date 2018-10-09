@@ -136,6 +136,8 @@ ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 hwclock --systohc
 ```
 
+See https://wiki.archlinux.org/index.php/Locale
+
 Uncomment `en_US.UTF-8 UTF-8` (and `fr_FR.UTF-8 UTF-8` if needed) in `/etc/locale.gen`.
 
 Generate locales:
@@ -145,8 +147,6 @@ locale-gen
 ```
 
 Set default locale:
-
-- https://wiki.archlinux.org/index.php/Locale#LC_COLLATE:_collation
 
 ```sh
 echo "LANG=en_US.UTF-8
@@ -256,13 +256,11 @@ swap LABEL=cryptswap /dev/urandom swap,offset=2048,cipher=aes-xts-plain64,size=5
 ## Intel Microcode
 
 - https://wiki.archlinux.org/index.php/Microcode 
-if Ryzen or amd cpu amd-ucode
-- https://www.archlinux.org/packages/core/any/amd-ucode/
 
 ```sh
 pacman -S intel-ucode
 ```
-(Same here for amd-ucode)
+
 Add `initrd /intel-ucode.img` above `initrd /initramfs-linux.img` in `/boot/loader/entries/arch.conf`.
 
 Check after reboot:
@@ -270,6 +268,8 @@ Check after reboot:
 ```sh
 dmesg -T | grep microcode
 ```
+
+Use `amd-ucode` for an AMD CPU.
 
 ## Networking with NetworkManager
 
