@@ -16,6 +16,42 @@ Here is the setup I use:
 
 This is mostly based on the [installation guide](https://wiki.archlinux.org/index.php/Installation_guide). I kept what I needed and added other parts. I made sure to put the links to all the wiki pages that I used. (❤️ Arch Wiki)
 
+## Table of content
+
+- [Inital setup](#inital-setup)
+- [Disk management](#disk-management)
+  - [Method 1 - "Classic" (unencrypted)](#method-1---classic-unencrypted)
+    - [Partitions](#partitions)
+    - [File systems](#file-systems)
+  - [Method 2 - LVM (unecrypted)](#method-2---lvm-unecrypted)
+    - [Partitions](#partitions)
+    - [LVM](#lvm)
+    - [File systems](#file-systems)
+  - [Method 3 - LUKS + crypttab](#method-3---luks--crypttab)
+    - [Partitions](#partitions)
+    - [LUKS](#luks)
+    - [File systems](#file-systems)
+    - [Encrypted swap](#encrypted-swap)
+  - [Method 4 - LVM on LUKS](#method-4---lvm-on-luks)
+    - [Partitions](#partitions)
+    - [LUKS](#luks)
+    - [LVM](#lvm)
+    - [File systems](#file-systems)
+- [Install system](#install-system)
+- [System setup](#system-setup)
+- [Initial ramdisk](#initial-ramdisk)
+- [Bootloader: systemd-boot](#bootloader-systemd-boot)
+- [Intel Microcode](#intel-microcode)
+- [Networking: NetworkManager](#networking-networkmanager)
+- [Reboot! (if you want)](#reboot-if-you-want)
+- [User account](#user-account)
+- [Xorg](#xorg)
+- [Desktop environment: Plasma and KDE](#desktop-environment-plasma-and-kde)
+- [Display manager: SDDM](#display-manager-sddm)
+- [Fonts](#fonts)
+- [VMware](#vmware)
+- [Now what?](#now-what)
+
 ## Inital setup
 
 If using a French keyboard:
@@ -361,7 +397,7 @@ Set root password:
 passwd
 ```
 
-## Inital ramdisk
+## Initial ramdisk
 
 - https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Configuring_mkinitcpio
 - https://wiki.archlinux.org/index.php/Mkinitcpio
@@ -379,7 +415,7 @@ Generate the ramdisks using the presets:
 mkinitcpio -P
 ```
 
-## Setup systemd-boot as the bootloader
+## Bootloader: systemd-boot
 
 - https://wiki.archlinux.org/index.php/Systemd-boot
 - https://bbs.archlinux.org/viewtopic.php?id=230911
@@ -430,7 +466,7 @@ dmesg -T | grep microcode
 
 Use `amd-ucode` for an AMD CPU.
 
-## Networking with NetworkManager
+## Networking: NetworkManager
 
 - https://wiki.archlinux.org/index.php/NetworkManager
 
