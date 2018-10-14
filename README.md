@@ -298,7 +298,7 @@ Then the logical volumes:
 
 ```sh
 lvcreate -L xG vg0 -n swap
-lvcreate -L 100%FREE vg0 -n root
+lvcreate -l 100%FREE vg0 -n root
 ```
 
 #### File systems
@@ -472,8 +472,8 @@ Use `amd-ucode` for an AMD CPU.
 
 ```sh
 pacman -S networkmanager
-sudo systemctl enable NetworkManager
-sudo systemctl start NetworkManager
+systemctl enable NetworkManager
+systemctl start NetworkManager
 ```
 
 If wired with DHCP, nothing more to do.
@@ -529,9 +529,9 @@ pacman -S kde-applications
 - https://wiki.archlinux.org/index.php/SDDM
 
 ```sh
-sudo pacman -S sddm
-sudo systemctl enable sddm
-sudo systemctl start sddm
+pacman -S sddm
+systemctl enable sddm
+systemctl start sddm
 ```
 
 By default, Arch uses the `archlinux-simplyblack` theme, which is ugly. Let's setup `breeze` (the *original* default):
@@ -562,8 +562,8 @@ To install the VMware tools:
 
 ```sh
 pacman -S openvpn-vm-tools
-sudo systemctl enable vmtoolsd
-sudo systemctl start vmtoolsd
+systemctl enable vmtoolsd
+systemctl start vmtoolsd
 ```
 
 ## Now what?
