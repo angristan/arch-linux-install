@@ -208,7 +208,7 @@ As usual, we want to use UUID since they are safer to use than their `/dev` mapp
 
 Since it will be wiped, we can't use a UUID or a label to identify it. Except if we create a tiny, empty file system with a label and then define an offset in `crypttab`.
 
-After entering pacstraping the system and entering `arch-root`:
+After pacstraping the system and entering `arch-root`:
 
 ```sh
 mkfs.ext2 -L cryptswap /dev/sda3 1M
