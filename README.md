@@ -409,7 +409,7 @@ The `options` line depends on the disk method you used.
 To get the [partition UUID](https://wiki.archlinux.org/index.php/Persistent_block_device_naming#by-uuid) easily (since we can't copy/paste anything at this point):
 
 ```sh
-ls -l /dev/disk/by-uuid/ | grep <partition name> | cut -f 9 -d " " >> /boot/loader/entries/arch.conf
+blkid -s PARTUUID -o value /dev/<partition name>
 ```
 
 ## Intel Microcode
