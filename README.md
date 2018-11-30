@@ -366,7 +366,7 @@ passwd
 - https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Configuring_mkinitcpio
 - https://wiki.archlinux.org/index.php/Mkinitcpio
 
-The `HOOKS` line might need to be updated in `/etc/mkminitcpio.conf` depending on the disk method you used:
+The `HOOKS` line might need to be updated in `/etc/mkinitcpio.conf` depending on the disk method you used:
 
 - Method 1: nothing to change
 - Method 2: `base systemd udev autodetect modconf block sd-lvm2 filesystems keyboard fsck`
