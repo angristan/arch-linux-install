@@ -444,7 +444,7 @@ If wired with DHCP, nothing more to do.
 
 ## Reboot! (if you want)
 
-As this point, the system should be working and usable, you we can reboot. You can also stay in the chroot.
+As this point, the system should be working and usable, you can reboot. You can also stay in the chroot.
 
 ```sh
 exit
