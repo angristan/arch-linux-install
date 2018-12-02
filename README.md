@@ -67,6 +67,8 @@ cfdisk /dev/sda
 
 Replace `sda` with your drive. Choose GPT if asked. Create the partitions and label them. Then write and quit.
 
+**The tutorial will assume `/dev/sda` is your drive for the rest of the tutorial**
+
 ### Method 1 - "Classic" (unencrypted)
 
 #### Partitions
