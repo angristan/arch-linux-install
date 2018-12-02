@@ -62,10 +62,10 @@ Most people use the 4th one these days.
 For each method, you can launch the tool with:
 
 ```sh
-cfdisk /dev/sda1
+cfdisk /dev/sda
 ```
 
-Choose GPT if asked. Create the partitions and label them. Then write and quit.
+Replace `sda` with your drive. Choose GPT if asked. Create the partitions and label them. Then write and quit.
 
 ### Method 1 - "Classic" (unencrypted)
 
