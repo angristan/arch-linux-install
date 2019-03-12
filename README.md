@@ -411,7 +411,7 @@ The `options` line depends on the disk method you used.
 To get the [partition UUID](https://wiki.archlinux.org/index.php/Persistent_block_device_naming#by-uuid) easily (since we can't copy/paste anything at this point):
 
 ```sh
-blkid -s UUID -o value /dev/<sda2 name> >> /boot/loader/entries/arch.conf
+blkid -s UUID -o value /dev/sda2 >> /boot/loader/entries/arch.conf
 ```
 
 ## Intel Microcode
