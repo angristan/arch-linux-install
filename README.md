@@ -296,7 +296,7 @@ swapon /dev/vg0/swap
 Install the base packages:
 
 ```sh
-pacstrap /mnt base base-devel
+pacstrap /mnt base base-devel linux linux-firmware
 ```
 
 ## System setup
