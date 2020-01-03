@@ -337,6 +337,12 @@ echo "LANG=en_US.UTF-8
 LC_COLLATE=C" > /etc/locale.conf
 ```
 
+Set default keymap
+
+```sh
+echo "KEYMAP=us" > /etc/vconsole.conf
+```
+
 Set keymap to French (if needed):
 
 ```sh
@@ -354,7 +360,7 @@ Set hosts file:
 ```sh
 echo "127.0.0.1 localhost
 ::1 localhost
-127.0.1.1 arch.localdomain arch" >> /etc/hosts
+127.0.0.1 arch.localdomain arch" >> /etc/hosts
 ```
 
 Set root password:
@@ -373,7 +379,12 @@ The `HOOKS` line might need to be updated in `/etc/mkinitcpio.conf` depending on
 - Method 1: nothing to change
 - Method 2: `base systemd udev autodetect modconf block sd-lvm2 filesystems keyboard fsck`
 - Method 3: `base systemd udev autodetect keyboard sd-vconsole modconf block sd-encrypt filesystems fsck`
-- Method 4: `base systemd udev autodetect keyboard sd-vconsole modconf block sd-encrypt sd-lvm2 filesystems fsck`
+- Method 4: You need to install lvm with the following :
+            ```sh
+            pacman --sync lvm
+            ```
+            Afterward check your line matches this one:
+            `base systemd udev autodetect keyboard sd-vconsole modconf block sd-encrypt sd-lvm2 filesystems fsck`
 
 Generate the ramdisks using the presets:
 
