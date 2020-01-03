@@ -417,13 +417,13 @@ The `options` line depends on the disk method you used.
 - Method 1: `options root=UUID=<sda2 UUID> rw`
 - Method 2: `options root=/dev/vg0/root rw`
 - Method 3: `options rd.luks.name=<sda2 UUID>=cryptroot root=/dev/mapper/cryptroot rw`
-- Method 4: `options rd.luks.name=<sda2 UUID>=cryptlvm root=/dev/vg0/root rw`
+- Method 4: `options rd.luks.name=UUID=cryptlvm root=/dev/vg0/root rw`
 
 To get the [partition UUID](https://wiki.archlinux.org/index.php/Persistent_block_device_naming#by-uuid) easily (since we can't copy/paste anything at this point):
-
 ```sh
 blkid -s UUID -o value /dev/sda2 >> /boot/loader/entries/arch.conf
 ```
+Then open `/boot/loader/entries/arch.conf`, and replace UUID with the new line.
 
 ## Intel Microcode
 
