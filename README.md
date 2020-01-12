@@ -57,7 +57,7 @@ I will describe below 4 ways of using your disk:
 
 Most people use the 4th one these days.
 
-`cfdisk` is my favorite partitionning ncurses tool.
+`cfdisk` is my favorite partitioning ncurses tool.
 
 For each method, you can launch the tool with:
 
@@ -296,7 +296,7 @@ swapon /dev/vg0/swap
 Install the base packages:
 
 ```sh
-pacstrap /mnt base base-devel linux linux-firmware
+pacstrap /mnt base base-devel linux linux-firmware lvm
 ```
 
 ## System setup
