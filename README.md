@@ -16,6 +16,10 @@ Here is the setup I use:
 
 This is mostly based on the [installation guide](https://wiki.archlinux.org/index.php/Installation_guide). I kept what I needed and added other parts. I made sure to put the links to all the wiki pages that I used. (❤️ Arch Wiki)
 
+## Download the ISO
+
+First, download the ISO here https://www.archlinux.org/download/ and burn to a drive or insert it to your VM, and boot on it.
+
 ## Inital setup
 
 If using a French keyboard:
@@ -77,7 +81,7 @@ Replace `sda` with your drive. Choose GPT if asked. Create the partitions and la
 |------------|--------|------------------|
 | /dev/sda1  | 512M   | EFI System       |
 | /dev/sda2  | xG     | Linux Filesystem |
-| /dev/sda3  | xG     | swap             |
+| /dev/sda3  | xG     | Linux swap       |
 
 #### File systems
 
@@ -296,7 +300,7 @@ swapon /dev/vg0/swap
 Install the base packages:
 
 ```sh
-pacstrap /mnt base base-devel linux linux-firmware lvm
+pacstrap /mnt base base-devel linux linux-firmware
 ```
 
 ## System setup
@@ -403,16 +407,10 @@ options ...
 
 The `options` line depends on the disk method you used.
 
-- Method 1: `options root=UUID=<sda2 UUID> rw`
+- Method 1: `options root=UUID=$(blkid -s UUID -o value /dev/sda2) rw`
 - Method 2: `options root=/dev/vg0/root rw`
-- Method 3: `options rd.luks.name=<sda2 UUID>=cryptroot root=/dev/mapper/cryptroot rw`
-- Method 4: `options rd.luks.name=<sda2 UUID>=cryptlvm root=/dev/vg0/root rw`
-
-To get the [partition UUID](https://wiki.archlinux.org/index.php/Persistent_block_device_naming#by-uuid) easily (since we can't copy/paste anything at this point):
-
-```sh
-blkid -s UUID -o value /dev/sda2 >> /boot/loader/entries/arch.conf
-```
+- Method 3: `options rd.luks.name=$(blkid -s UUID -o value /dev/sda3)=cryptroot root=/dev/mapper/cryptroot rw`
+- Method 4: `options rd.luks.name=$(blkid -s UUID -o value /dev/sda3)=cryptlvm root=/dev/vg0/root rw`
 
 ## Intel Microcode
 
