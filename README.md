@@ -405,12 +405,18 @@ initrd /initramfs-linux.img
 options ...
 ```
 
-The `options` line depends on the disk method you used.
+For methods 1, 3, and 4, get the root partition's UUID:
 
-- Method 1: `options root=UUID=$(blkid -s UUID -o value /dev/sda2) rw`
+```sh
+blkid -s UUID -o value /dev/sda2
+```
+
+The `options` line depends on the disk method you used. Replace `<sda2 UUID>` with the UUID returned above.
+
+- Method 1: `options root=UUID=<sda2 UUID> rw`
 - Method 2: `options root=/dev/vg0/root rw`
-- Method 3: `options rd.luks.name=$(blkid -s UUID -o value /dev/sda2)=cryptroot root=/dev/mapper/cryptroot rw`
-- Method 4: `options rd.luks.name=$(blkid -s UUID -o value /dev/sda2)=cryptlvm root=/dev/vg0/root rw`
+- Method 3: `options rd.luks.name=<sda2 UUID>=cryptroot root=/dev/mapper/cryptroot rw`
+- Method 4: `options rd.luks.name=<sda2 UUID>=cryptlvm root=/dev/vg0/root rw`
 
 ## Intel Microcode
 
