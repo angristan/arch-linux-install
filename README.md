@@ -300,7 +300,7 @@ swapon /dev/vg0/swap
 Install the base packages:
 
 ```sh
-pacstrap /mnt base base-devel linux linux-firmware
+pacstrap /mnt base base-devel linux linux-firmware lvm2
 ```
 
 ## System setup
