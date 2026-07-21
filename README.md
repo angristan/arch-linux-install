@@ -409,8 +409,8 @@ The `options` line depends on the disk method you used.
 
 - Method 1: `options root=UUID=$(blkid -s UUID -o value /dev/sda2) rw`
 - Method 2: `options root=/dev/vg0/root rw`
-- Method 3: `options rd.luks.name=$(blkid -s UUID -o value /dev/sda3)=cryptroot root=/dev/mapper/cryptroot rw`
-- Method 4: `options rd.luks.name=$(blkid -s UUID -o value /dev/sda3)=cryptlvm root=/dev/vg0/root rw`
+- Method 3: `options rd.luks.name=$(blkid -s UUID -o value /dev/sda2)=cryptroot root=/dev/mapper/cryptroot rw`
+- Method 4: `options rd.luks.name=$(blkid -s UUID -o value /dev/sda2)=cryptlvm root=/dev/vg0/root rw`
 
 ## Intel Microcode
 
