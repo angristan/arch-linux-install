@@ -551,7 +551,7 @@ Install `xf86-video-vmware` instead of `xf86-video-intel`. `xf86-input-vmmouse` 
 To install the VMware tools:
 
 ```sh
-pacman -S openvpn-vm-tools
+pacman -S open-vm-tools
 systemctl enable vmtoolsd
 systemctl start vmtoolsd
 ```
